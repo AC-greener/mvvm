@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+  <script src="./compile.js"></script>
+  <script src="./MVVM.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>hello</h1>
+    老王
+    <input type="text">
+    <span>aaa</span>
+    猪
+  </div>
+  <script>
+    /*
+      vue实现双向数据绑定
+      1，模板编译
+      2，数据劫持 观察数据变化， 
+      3，Watcher
+
+    */
+    let vm = new MVVM({
+      el: '#app'
+    })
+  </script>
+</body>
+</html>
