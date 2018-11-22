@@ -11,11 +11,10 @@
 </head>
 <body>
   <div id="app">
-    <h1>hello</h1>
-    老王
+    {{message.a}}
+    <input v-model='message.a' id='zhuzhu' value="猪">
     <input type="text">
-    <span>aaa</span>
-    猪
+    {{message.a}}
   </div>
   <script>
     /*
@@ -26,7 +25,12 @@
 
     */
     let vm = new MVVM({
-      el: '#app'
+      el: '#app',
+      data: {
+        message: {
+          a: 'hello world'
+        }
+      }
     })
   </script>
 </body>
