@@ -4,7 +4,11 @@ class MVVM{
     this.$data = options.data
     //如果有el，就编译
     if(this.$el) {
-      new Compile(this.$el, this)
+      
+      //数据劫持，就是把对象的属性改成get和setter方法
+      new Observer(this.$data)
+      //用元素和数据进行编译
+      // new Compile(this.$el, this)
     }
   }
 }
