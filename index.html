@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+  <script src="./watcher.js"></script>
   <script src="./observer.js"></script>
   <script src="./compile.js"></script>
   <script src="./MVVM.js"></script>
@@ -13,7 +14,7 @@
 <body>
   <div id="app">
     {{message.a}}
-    <input v-model='message.a' id='zhuzhu' value="猪">
+    <input v-model='message.a' id='zhuzhu'>
     <input type="text">
     {{message.a}}
   </div>

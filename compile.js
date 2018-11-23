@@ -84,21 +84,50 @@ CompileUtil = {
       return prev[next]
     }, vm.$data)
   },
+  getTextVal(vm, expr) {
+    return expr.replace(/\{\{([^}]+)\}\}/g, (...arguments) => {
+      return this.getVal(vm, arguments[1])
+    })
+  },
   //处理文本
   text(node, vm, expr) {
     console.log('处理{{}}语法')
     let updateFn = this.updater['textUpdater']
-    let value = expr.replace(/\{\{([^}]+)\}\}/g, (...arguments) => {
-      return this.getVal(vm, arguments[1])
+    let value = this.getTextVal(vm, expr)
+    
+    expr.replace(/\{\{([^}]+)\}\}/g, (...arguments) => {
+      new Watcher(vm, arguments[1], (newValue) => {
+        //文本节点变化， 则需要重新获取依赖属性更新文本中的内容
+        updateFn && updateFn(node, this.getTextVal(vm, expr))
+      })
     })
-    console.log("94", value)
     updateFn && updateFn(node, value)
+  },
+  setVal(vm, expr, newValue) {
+    expr = expr.split('.')
+    //收敛
+    return expr.reduce((prev, next, currentIndex) => {
+      if(currentIndex === expr.length-1) {
+        return prev[next] = newValue
+      }
+      return prev[next]
+    }, vm.$data) 
   },
   //处理v-model指令
   model(node, vm, expr) {
     console.log('处理v-model指令')
     let updateFn = this.updater['modelUpdater']
+
+    // 这里应该加一个监控 数据变化 则调用watcher的callback
+    new Watcher(vm, expr, (newValue) => {
+      updateFn && updateFn(node, this.getVal(vm, expr))
+    })
+    node.addEventListener('input', (e) => {
+      let newValue = e.target.value
+      this.setVal(vm, expr, newValue)
+    })
     updateFn && updateFn(node, this.getVal(vm, expr))
+
   },
   updater: {
     //文本更新
