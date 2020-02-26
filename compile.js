@@ -1,17 +1,17 @@
 class Compile {
   constructor(el, vm) {
-    this.el = this.isElementNode(el) ? el : document.querySelector(el)
+
+    this.el = this.isElementNode(el) ? el : document.querySelector(el) //获取el元素
     this.vm = vm
     if(this.el) {
-      //先把dom放到fragment中
-      //想要提取元素的v-model 和文本节点{{}}
+      //先把dom放到文档碎片中
+      //提取想要的元素节点v-model 和文本节点{{}}
       //最后把编译好的fragment中
       var fragment = this.nodeToFragment(this.el)
       this.compile(fragment)
       this.el.appendChild(fragment)
     }
    
-
   }
    //辅助方法
   isElementNode(node) {
@@ -19,23 +19,26 @@ class Compile {
   }
   //核心方法
   compile(fragment) {
-    //递归获取节点
+    //递归获取节点  childNodes只能拿到一层儿子节点，拿不到孙子节点
     var childNodes = fragment.childNodes
     Array.from(childNodes).forEach(node => {
       if(this.isElementNode(node)) {
-        //编译元素
+        //编译元素节点 带v-model
         this.compileElement(node)
-
-        //递归调用
+        //继续递归编译
         this.compile(node)
       } else {
-        //编译文本节点
+        //编译文本节点 带{{}}
         this.compileText(node)
       }
     })    
   }
   nodeToFragment(el) {
     let fragment = document.createDocumentFragment();
+    // for(let i = 0; i < nodes.length; i++) {
+    //   console.log(nodes[i])
+    //   fragment.appendChild(nodes.item(i))
+    // }
     let firstChild = el.firstChild
     while(el.firstChild) {
       fragment.appendChild(firstChild)
@@ -78,7 +81,7 @@ class Compile {
 CompileUtil = {
   //获取实例上的数据
   getVal(vm, expr) {
-    console.log(expr)
+    // console.log(expr)
     expr = expr.split('.')
     return expr.reduce((prev, next) => {
       return prev[next]
@@ -91,7 +94,7 @@ CompileUtil = {
   },
   //处理文本
   text(node, vm, expr) {
-    console.log('处理{{}}语法')
+    // console.log('处理{{}}语法')
     let updateFn = this.updater['textUpdater']
     let value = this.getTextVal(vm, expr)
     
@@ -115,7 +118,7 @@ CompileUtil = {
   },
   //处理v-model指令
   model(node, vm, expr) {
-    console.log('处理v-model指令')
+    // console.log('处理v-model指令')
     let updateFn = this.updater['modelUpdater']
 
     // 这里应该加一个监控 数据变化 则调用watcher的callback

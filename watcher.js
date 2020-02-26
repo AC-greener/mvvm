@@ -9,7 +9,6 @@ class Watcher {
   }
   //获取实例上的数据
   getVal(vm, expr) {
-    console.log(expr)
     expr = expr.split('.')
     return expr.reduce((prev, next) => {
       return prev[next]
@@ -22,6 +21,7 @@ class Watcher {
     Dep.target = null
     return oldValue
   }
+  //对外暴露的更新方法
   update() {
     let newValue = this.getVal(this.vm, this.expr)
     let oldValue = this.oldValue

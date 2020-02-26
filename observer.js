@@ -8,11 +8,12 @@ class Observer {
     if(!data || typeof data !== 'object') {
       return
     }
-    console.log(Object.keys(data))
+    // console.log(Object.keys(data))
+    console.log(data)
     Object.keys(data).forEach(key => {
       //劫持
       this.defineReactive(data, key, data[key])
-      this.observer(data[key])
+      this.observer(data[key])   //递归劫持
     })
   }
 
@@ -25,20 +26,19 @@ class Observer {
       enumerable: true,
       configurable: true,
       get() {
-        
         Dep.target && dep.addSub(Dep.target)
-        console.log('大傻逼！！')
+        // console.log('大傻逼！！')
         return value
       },
       set(newValue) {
         if(newValue !== value) {
-          console.log('智障！！')
+          // console.log('智障！！')
           that.observer(newValue)  //如果是对象就继续劫持
           value = newValue
           //通知所有人数据更新了
           dep.notify()
         }
-      }
+      } 
     })
   }
 }
